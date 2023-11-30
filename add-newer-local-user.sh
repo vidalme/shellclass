@@ -4,7 +4,7 @@
 #Check if the user is root
 if [[ "${EUID}" -ne 0 ]]
 then
-	echo "${?} needs root to be used."
+	echo "${?} needs root to be used." >&2
 	exit 1
 fi
 
@@ -12,7 +12,7 @@ fi
 if [[ ${#} -lt 1 ]]
 then
 	echo "USAGE: ${0} USER_NAME [COMMENT]..."
-	echo "Create and account o the local sustem with the name of USER_NAME and a comments field of COMENT."
+	echo "Create and account o the local sustem with the name of USER_NAME and a comments field of COMENT." >&2
 	exit 1
 fi
 
@@ -24,7 +24,7 @@ echo ${ALL_USERS} | grep -qw ${USERNAME} >> /dev/null
 
 if [[ "${?}" -eq 0 ]]
 then
-	echo "The user ${USERNAME} already exists"
+	echo "The user ${USERNAME} already exists" >&2
 	exit 1
 fi
 
@@ -33,7 +33,12 @@ PASSWORD=$(date +%s%N"${RANDOM}" | sha256sum | cut -c 1-20 )
 
 # Creates a new user
 COMMENT="${@:2}"
-useradd -M -c "${COMMENT}" -p "${PASSWORD}" "${USERNAME}"
+useradd -M -c "${COMMENT}" -p "${PASSWORD}" "${USERNAME}" &> /dev/null
+
+if [[ "${?}" -ne 0 ]]
+then
+	echo "w/e" >&2
+fi
 
 # display message for the helpdesk
 echo "New user created Successfully!"
