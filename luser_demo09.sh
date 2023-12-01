@@ -17,9 +17,29 @@
 #fi
 #
 
+#case "${1}" in
+#	start)
+#		echo "starting."
+#		;;
+#	stop)
+#		echo "stopping."
+#		;;
+#	status|state|--status|--state)
+#		echo "status;"
+#		;;
+#	*)
+#		echo "Suply a valid option" >&2
+#		exit 1
+#		;;
+#esac
+
 case "${1}" in
-	start)
-		echo "starting."
+	start) echo "starting." ;;
+	stop) echo "stopping." ;;
+	status)	echo "status:" ;;
+	*)
+		echo "Suply a valid option" >&2
+		exit 1
 		;;
 esac
 
