@@ -17,6 +17,16 @@ usage(){
   echo 
 }
 
+# keep it clean, save username
+USERNAME="${1}"
+
+usermod -e 1 -L '${USERNAME}' 
 
 
-	
+
+while getopts "dra" 
+do
+  	
+
+
+
