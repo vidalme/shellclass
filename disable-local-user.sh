@@ -28,5 +28,5 @@ while getopts "dra"
 do
   	
 
-
+oioioi
 
