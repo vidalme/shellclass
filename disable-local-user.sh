@@ -19,7 +19,7 @@ usage(){
 
 
 
-deleteFolder(){
+backup(){
   # arquivamento de diretorios 
   if [[ "${BACKUP}" = 'true' ]]
   then
@@ -32,7 +32,7 @@ deleteFolder(){
     fi
     # arquivar e comprimir folder do usuario e coloca-lo no diretorio archives
     echo 'Archiving and compressing'
-    tar cvfz /home/archives/"${USERNAME}".tar.gz /home/"${USERNAME}"/    
+    tar cvfz /home/archives/"${USER}".tar.gz /home/"${USER}"/    
   fi
   
 }
@@ -41,7 +41,7 @@ removeDirectory(){
   # remover diretorio do usuario
   if [[ "${DELETE_FOLDER}" = 'true' ]] 	
   then
-    rm -rf /home/"${USERNAME}"
+    rm -rf /home/"${USER}"
   fi	  
 
 }
@@ -50,12 +50,23 @@ removeUser(){
   # deletar o usuario direto
   if [[ ${DELETE_USER} = 'true' ]]
   then
-    userdel "${USERNAME}"
+    userdel "${USER}"
   fi
 
 }
 
+backupp(){
+  echo "${USER}"
+}
 
+setUser(){	
+  USER="${USER}"
+  backup
+  #backup
+  #usermod -e 1 -L "${USER}" 
+  #removeUser
+  #removeDirectory
+}
 
 while getopts dra OPTION
 do
@@ -70,7 +81,7 @@ do
 	;;
       a)
 	BACKUP='true'      
-        echo 'eu sou o a'
+        echo 'Ill backup homedirectory of the user'
 	;;
       ?)
         usage
@@ -81,20 +92,21 @@ done
 
 
 # remo flags so we can get the argument value
-# shift "$(( OPTIND - 1 ))"
-# save username
 shift "$(( OPTIND - 1  ))"
-#USERNAMES=${@:OPTIND}
 
-for USER in "${@}"
-do
+# check for at least 1 username input
+if [[ "${#}" == 0 ]]
+then
+  usage
+  exit 1
+fi
 
-	echo 'cuida'
-	echo ${USER}
+# quick loop to activate all users
+for USER in "${@}"; do
+	if [[ $("${USER}" -u id) -lt 999 ]]
+  then
+    setUser
+  fi
 done
-
-#setUser
-
-#usermod -e 1 -L '${USERNAME}' 
 
 
