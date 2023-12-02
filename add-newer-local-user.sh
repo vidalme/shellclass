@@ -33,7 +33,7 @@ PASSWORD=$(date +%s%N"${RANDOM}" | sha256sum | cut -c 1-20 )
 
 # Creates a new user
 COMMENT="${@:2}"
-useradd -M -c "${COMMENT}" -p "${PASSWORD}" "${USERNAME}" &> /dev/null
+useradd -m -c "${COMMENT}" -p "${PASSWORD}" "${USERNAME}" &> /dev/null
 
 if [[ "${?}" -ne 0 ]]
 then
